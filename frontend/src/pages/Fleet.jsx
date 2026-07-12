@@ -1,6 +1,7 @@
+import { useState } from "react";
 import "./Fleet.css";
 
-const fleetRows = [
+const initialFleetRows = [
   {
     regNo: "GT01AB4521",
     name: "VAN-05",
@@ -40,11 +41,59 @@ const fleetRows = [
 ];
 
 function Fleet() {
+  const [fleetRows, setFleetRows] = useState(initialFleetRows);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    regNo: "",
+    name: "",
+    type: "Van",
+    capacity: "",
+    acqCost: "",
+  });
+
   const statusClass = (status) => {
     if (status === "Available") return "fleet-pill fleet-pill-green";
     if (status === "On Trip") return "fleet-pill fleet-pill-blue";
     if (status === "In Shop") return "fleet-pill fleet-pill-amber";
     return "fleet-pill fleet-pill-red";
+  };
+
+  const openModal = () => setIsModalOpen(true);
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setFormData({
+      regNo: "",
+      name: "",
+      type: "Van",
+      capacity: "",
+      acqCost: "",
+    });
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const newFleetRow = {
+      regNo: formData.regNo,
+      name: formData.name,
+      type: formData.type,
+      capacity: formData.capacity,
+      odometer: "0",
+      acqCost: formData.acqCost,
+      status: "Available",
+    };
+
+    setFleetRows((previous) => [...previous, newFleetRow]);
+    closeModal();
   };
 
   return (
@@ -75,7 +124,7 @@ function Fleet() {
             aria-label="Search registration number"
           />
 
-          <button type="button" className="add-vehicle-btn">
+          <button type="button" className="add-vehicle-btn" onClick={openModal}>
             + Add Vehicle
           </button>
         </div>
@@ -116,6 +165,110 @@ function Fleet() {
           hidden from Trip Dispatcher.
         </p>
       </div>
+
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div
+            className="modal-card"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="modal-header">
+              <h2>Add Vehicle Details</h2>
+              <button
+                type="button"
+                className="modal-close-btn"
+                onClick={closeModal}
+              >
+                ×
+              </button>
+            </div>
+
+            <form className="driver-form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="regNo">Reg No.</label>
+                <input
+                  id="regNo"
+                  name="regNo"
+                  type="text"
+                  value={formData.regNo}
+                  onChange={handleChange}
+                  placeholder="Enter registration number"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="name">Name/Model</label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Enter vehicle name/model"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="type">Type</label>
+                <select
+                  id="type"
+                  name="type"
+                  value={formData.type}
+                  onChange={handleChange}
+                >
+                  <option value="Van">Van</option>
+                  <option value="Truck">Truck</option>
+                  <option value="Mini">Mini</option>
+                  <option value="Bus">Bus</option>
+                  <option value="Motor Cycle">Motor Cycle</option>
+                  <option value="Pick Up">Pick Up</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="capacity">Capacity</label>
+                <input
+                  id="capacity"
+                  name="capacity"
+                  type="text"
+                  value={formData.capacity}
+                  onChange={handleChange}
+                  placeholder="Enter capacity"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="acqCost">Acquisition Cost</label>
+                <input
+                  id="acqCost"
+                  name="acqCost"
+                  type="text"
+                  value={formData.acqCost}
+                  onChange={handleChange}
+                  placeholder="Enter acquisition cost"
+                  required
+                />
+              </div>
+
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  className="secondary-btn"
+                  onClick={closeModal}
+                >
+                  Close
+                </button>
+                <button type="submit" className="primary-btn">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

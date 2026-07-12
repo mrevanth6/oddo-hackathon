@@ -1,6 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Patrick+Hand&display=swap");
+
+:root {
+    --ink-900: #0f1724;
+    --ink-800: #18212f;
+    --ink-700: #223044;
+    --paper: #f4f6f8;
+    --line: #b3bcc6;
+    --accent: #f4b400;
+    --accent-shadow: rgba(170, 124, 0, 0.3);
+    --green: #2ea44f;
+    --blue: #2f76bd;
+    --amber: #ea8c00;
+    --red: #d73d32;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 .fleet-page {
     width: 100%;
-    color: #223044;
+    color: var(--ink-700);
+    font-family: "Manrope", sans-serif;
 }
 
 .fleet-toolbar h3 {
@@ -16,17 +39,19 @@
     align-items: center;
     gap: 12px;
     margin-bottom: 14px;
+    flex-wrap: wrap;
 }
 
 .fleet-toolbar-row select,
 .fleet-toolbar-row input {
     height: 34px;
-    border: 1px solid #b3bcc6;
+    border: 1px solid var(--line);
     border-radius: 8px;
     background: #f8fafc;
-    color: #223044;
+    color: var(--ink-700);
     padding: 0 10px;
     font-size: 13px;
+    outline: none;
 }
 
 .fleet-toolbar-row select {
@@ -37,32 +62,46 @@
     min-width: 180px;
 }
 
+.fleet-toolbar-row select:focus,
+.fleet-toolbar-row input:focus {
+    border-color: #8ea5bf;
+    box-shadow: 0 0 0 2px rgba(142, 165, 191, 0.18);
+}
+
 .add-vehicle-btn {
     margin-left: auto;
     height: 34px;
     padding: 0 16px;
     border: none;
     border-radius: 8px;
-    background: #f4b400;
+    background: var(--accent);
     color: #1a1a1a;
     font-weight: 700;
     cursor: pointer;
+    box-shadow: 0 4px 10px var(--accent-shadow);
+}
+
+.add-vehicle-btn:hover {
+    filter: brightness(0.98);
 }
 
 .fleet-table-wrap {
     overflow-x: auto;
+    border-radius: 10px;
 }
 
 .fleet-table {
     width: 100%;
     border-collapse: collapse;
-    background: #f4f6f8;
+    background: var(--paper);
+    border: 1px solid #d8e0ea;
 }
 
 .fleet-table thead th {
     text-align: left;
     font-size: 11px;
     text-transform: uppercase;
+    letter-spacing: 0.7px;
     color: #6a7789;
     padding: 10px;
     border-bottom: 1px solid #d8e0ea;
@@ -85,25 +124,148 @@
 }
 
 .fleet-pill-green {
-    background: #2ea44f;
+    background: var(--green);
 }
 
 .fleet-pill-blue {
-    background: #2f76bd;
+    background: var(--blue);
 }
 
 .fleet-pill-amber {
-    background: #ea8c00;
+    background: var(--amber);
 }
 
 .fleet-pill-red {
-    background: #d73d32;
+    background: var(--red);
 }
 
 .fleet-note {
     margin-top: 10px;
     color: #f97316;
     font-size: 12px;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 36, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.modal-card {
+    width: min(720px, 100%);
+    max-height: calc(100vh - 40px);
+    overflow: auto;
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #d8e0ea;
+    box-shadow: 0 24px 60px rgba(15, 23, 36, 0.28);
+    padding: 18px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-family: "Patrick Hand", cursive;
+    font-size: 34px;
+    font-weight: 400;
+    color: var(--ink-900);
+}
+
+.modal-close-btn {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: #f3f6fb;
+    color: var(--ink-700);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.driver-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #546276;
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: #fff;
+    padding: 0 12px;
+    outline: none;
+    font-size: 14px;
+    color: var(--ink-700);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #8ea5bf;
+    box-shadow: 0 0 0 2px rgba(142, 165, 191, 0.18);
+}
+
+.modal-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.secondary-btn,
+.primary-btn {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 9px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.secondary-btn {
+    background: #e8edf3;
+    color: var(--ink-700);
+}
+
+.primary-btn {
+    background: var(--accent);
+    color: #1a1a1a;
+    box-shadow: 0 4px 10px var(--accent-shadow);
+}
+
+.secondary-btn:hover,
+.primary-btn:hover {
+    filter: brightness(0.98);
 }
 
 @media (max-width: 900px) {
@@ -113,5 +275,19 @@
 
     .add-vehicle-btn {
         margin-left: 0;
+    }
+}
+
+@media (max-width: 760px) {
+    .driver-form {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-card {
+        padding: 16px;
+    }
+
+    .modal-header h2 {
+        font-size: 28px;
     }
 }

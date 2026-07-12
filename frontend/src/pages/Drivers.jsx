@@ -3,38 +3,38 @@ import { useState } from "react";
 const DriverRows = [
   {
     DRIVER: "Alex",
-    "LICENSE No.": "DL-12345",
+    LICENSE_No: "DL-12345",
     EXPIRY: "2025-12-31",
-    "CONTACT No.": "98765xxxxxx",
-    "TRIP COMPLETION": "95%",
+    CONTACT_No: "98765xxxxxx",
+    TRIP_COMPLETION: "95%",
     SAFETY: "Available",
     STATUS: "Available",
   },
   {
     DRIVER: "Alex",
-    "LICENSE No.": "DL-12345",
+    LICENSE_No: "DL-12345",
     EXPIRY: "2025-12-31",
-    "CONTACT No.": "98765xxxxxx",
-    "TRIP COMPLETION": "95%",
+    CONTACT_No: "98765xxxxxx",
+    TRIP_COMPLETION: "95%",
     SAFETY: "Available",
     STATUS: "Available",
   },
   {
     DRIVER: "Priya",
-    "LICENSE No.": "DL-54321",
+    LICENSE_No: "DL-54321",
     EXPIRY: "2025-12-31",
-    "CONTACT No.": "98765xxxxxx",
-    "TRIP COMPLETION": "95%",
+    CONTACT_No: "98765xxxxxx",
+    TRIP_COMPLETION: "95%",
     SAFETY: "Available",
     STATUS: "Available",
   },
   {
     DRIVER: "Suresh",
-    "LICENSE No.": "DL-98765",
+    LICENSE_No: "DL-98765",
     TYPE: "Van",
     EXPIRY: "2025-12-31",
-    "CONTACT No.": "98765xxxxxx",
-    "TRIP COMPLETION": "95%",
+    CONTACT_No: "98765xxxxxx",
+    TRIP_COMPLETION: "95%",
     SAFETY: "Available",
     STATUS: "Retired",
   },
@@ -45,9 +45,9 @@ function Drivers() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     DRIVER: "",
-    LICENSE_NO: "",
+    LICENSE_No: "",
     EXPIRY: "",
-    CONTACT_NO: "",
+    CONTACT_No: "",
     SAFETY: "Available",
     STATUS: "Available",
   });
@@ -64,9 +64,9 @@ function Drivers() {
     setIsModalOpen(false);
     setFormData({
       DRIVER: "",
-      LICENSE_NO: "",
+      LICENSE_No: "",
       EXPIRY: "",
-      CONTACT_NO: "",
+      CONTACT_No: "",
       SAFETY: "Available",
       STATUS: "Available",
     });
@@ -112,19 +112,15 @@ function Drivers() {
             {drivers.map((row) => (
               <tr key={row.DRIVER}>
                 <td>{row.DRIVER}</td>
-                <td>{row["LICENSE No."]}</td>
+                <td>{row.LICENSE_No}</td>
                 <td>{row.EXPIRY}</td>
-                <td>{row["CONTACT No."]}</td>
+                <td>{row.CONTACT_No}</td>
 
                 <td>
-                  <span className={statusClass(row["SAFETY"])}>
-                    {row["SAFETY"]}
-                  </span>
+                  <span className={statusClass(row.SAFETY)}>{row.SAFETY}</span>
                 </td>
                 <td>
-                  <span className={statusClass(row["STATUS"])}>
-                    {row["STATUS"]}
-                  </span>
+                  <span className={statusClass(row.STATUS)}>{row.STATUS}</span>
                 </td>
               </tr>
             ))}
@@ -163,12 +159,12 @@ function Drivers() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="LICENSE_NO">License No.</label>
+                <label htmlFor="LICENSE_No">License No.</label>
                 <input
-                  id="LICENSE_NO"
-                  name="LICENSE_NO"
+                  id="LICENSE_No"
+                  name="LICENSE_No"
                   type="text"
-                  value={formData.LICENSE_NO}
+                  value={formData.LICENSE_No}
                   onChange={handleChange}
                   placeholder="Enter license number"
                   required
@@ -188,12 +184,12 @@ function Drivers() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="CONTACT_NO">Contact No.</label>
+                <label htmlFor="CONTACT_No">Contact No.</label>
                 <input
-                  id="CONTACT_NO"
-                  name="CONTACT_NO"
+                  id="CONTACT_No"
+                  name="CONTACT_No"
                   type="tel"
-                  value={formData.CONTACT_NO}
+                  value={formData.CONTACT_No}
                   onChange={handleChange}
                   placeholder="Enter contact number"
                   required
