@@ -1,11 +1,20 @@
 // Connect to DB abd aslo create a table if it does not exist
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const dotenv = require('dotenv');   
 dotenv.config(); 
 const connection =mysql.createPool({
     uri:process.env.mysql_url,
     connectionLimit:10
-})   
+})
+// connection.getConnection((err, conn) => {
+//     if (err) {
+//         console.error('Error connecting to the database:', err);
+//         return;
+//     } 
+//     else{
+//         console.log('Connected to the database.');
+//     }
+// }) 
 // create a table if it does not exist
 connection.query(`
   CREATE TABLE IF NOT EXISTS users (
@@ -19,7 +28,7 @@ connection.query(`
 );
 `);
 //2. Vehicle Registry
-connection.query(`CREATE TABLE vehicles (
+connection.query(`CREATE TABLE IF NOT EXISTS vehicles (
     id VARCHAR(50) PRIMARY KEY,
     registration_number VARCHAR(50) UNIQUE NOT NULL,
     name VARCHAR(100) NOT NULL,
@@ -32,7 +41,7 @@ connection.query(`CREATE TABLE vehicles (
 );
 `)
 //Drivers Table
-connection.query(`CREATE TABLE drivers ( id VARCHAR(50) PRIMARY KEY,
+connection.query(`CREATE TABLE IF NOT EXISTS drivers ( id VARCHAR(50) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     license_number VARCHAR(50) UNIQUE NOT NULL,
     license_category VARCHAR(20) NOT NULL,
@@ -42,7 +51,7 @@ connection.query(`CREATE TABLE drivers ( id VARCHAR(50) PRIMARY KEY,
     status VARCHAR(50) DEFAULT 'Available'
 );`)
 //4. Trips Table
-connection.query(`CREATE TABLE trips (id VARCHAR(50) PRIMARY KEY,
+connection.query(`CREATE TABLE IF NOT EXISTS trips (id VARCHAR(50) PRIMARY KEY,
     source VARCHAR(150) NOT NULL,
     destination VARCHAR(150) NOT NULL,
     vehicle_id VARCHAR(50) REFERENCES vehicles(id) ON DELETE SET NULL,
@@ -58,7 +67,7 @@ connection.query(`CREATE TABLE trips (id VARCHAR(50) PRIMARY KEY,
 );`)
 
 //5. Maintenance Logs Table
-connection.query(`CREATE TABLE maintenance_logs ( id VARCHAR(50) PRIMARY KEY,
+connection.query(`CREATE TABLE IF NOT EXISTS maintenance_logs ( id VARCHAR(50) PRIMARY KEY,
     vehicle_id VARCHAR(50) REFERENCES vehicles(id) ON DELETE CASCADE,
     description TEXT NOT NULL,
     cost DECIMAL(12, 2) NOT NULL,
@@ -68,7 +77,7 @@ connection.query(`CREATE TABLE maintenance_logs ( id VARCHAR(50) PRIMARY KEY,
 );`)
 
 //-- 6. Fuel Logs Table
-connection.query(`CREATE TABLE fuel_logs (  id VARCHAR(50) PRIMARY KEY,
+connection.query(`CREATE TABLE IF NOT EXISTS fuel_logs (  id VARCHAR(50) PRIMARY KEY,
     vehicle_id VARCHAR(50) REFERENCES vehicles(id) ON DELETE CASCADE,
     liters INT NOT NULL,
     cost DECIMAL(12, 2) NOT NULL,
@@ -76,7 +85,7 @@ connection.query(`CREATE TABLE fuel_logs (  id VARCHAR(50) PRIMARY KEY,
 );`)
 
 //-- 7. Operational Expenses Table
-connection.query(`CREATE TABLE expenses ( id VARCHAR(50) PRIMARY KEY,
+connection.query(`CREATE TABLE IF NOT EXISTS expenses ( id VARCHAR(50) PRIMARY KEY,
      vehicle_id VARCHAR(50) REFERENCES vehicles(id) ON DELETE CASCADE,
     type VARCHAR(50) NOT NULL,
     amount DECIMAL(12, 2) NOT NULL,
@@ -84,15 +93,15 @@ connection.query(`CREATE TABLE expenses ( id VARCHAR(50) PRIMARY KEY,
     description VARCHAR(255) NOT NULL
 );`)
 //-- Seed Initial Users (Passwords are 'password123' for immediate dashboard entry)
-connection.query(`INSERT IGNORE INTO users (id, email, password_hash, name, role, contact_number) VALUES
-    ('u-1', 'manager@transitops.com', 'password123', 'Sarah Connor', 'Fleet Manager', '+1 555-0199') ON CONFLICT (id) DO NOTHING;
-    `)
-connection.query(`INSERT IGNORE INTO users (id, email, password_hash, name, role, contact_number) VALUES
-    ('u-2', 'driver@transitops.com', 'password123', 'Alex Mercer', 'Driver', '+1 555-0188') ON CONFLICT (id) DO NOTHING;
-    `)
-connection.query(`INSERT IGNORE INTO users (id, email, password_hash, name, role, contact_number) VALUES
-    ('u-3', 'safety@transitops.com', 'password123', 'Officer Frank', 'Safety Officer', '+1 555-0177') ON CONFLICT (id) DO NOTHING;`)
-connection.query(`INSERT IGNORE INTO users (id, email, password_hash, name, role, contact_number) VALUES
-('u-4', 'finance@transitops.com', 'password123', 'Martha Stewart', 'Financial Analyst', '+1 555-0166') ON CONFLICT (id) DO NOTHING;
-`)
+// connection.query(`INSERT IGNORE INTO users (id, email, password_hash, name, role, contact_number) VALUES
+//     ('u-1', 'manager@transitops.com', 'password123', 'Sarah Connor', 'Fleet Manager', '+1 555-0199') ON CONFLICT (id) DO NOTHING;
+//     `)
+// connection.query(`INSERT IGNORE INTO users (id, email, password_hash, name, role, contact_number) VALUES
+//     ('u-2', 'driver@transitops.com', 'password123', 'Alex Mercer', 'Driver', '+1 555-0188') ON CONFLICT (id) DO NOTHING;
+//     `)
+// connection.query(`INSERT IGNORE INTO users (id, email, password_hash, name, role, contact_number) VALUES
+//     ('u-3', 'safety@transitops.com', 'password123', 'Officer Frank', 'Safety Officer', '+1 555-0177') ON CONFLICT (id) DO NOTHING;`)
+// connection.query(`INSERT IGNORE INTO users (id, email, password_hash, name, role, contact_number) VALUES
+// ('u-4', 'finance@transitops.com', 'password123', 'Martha Stewart', 'Financial Analyst', '+1 555-0166') ON CONFLICT (id) DO NOTHING;
+// `)
 module.exports=connection;
