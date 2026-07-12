@@ -1,7 +1,10 @@
 import { useMemo, useState } from "react";
 import Sidebar from "./Sidebar";
 import TopNavBar from "./TopNavBar";
+import DashBoard from "../pages/DashBoard";
+import Fleet from "../pages/Fleet";
 import "./Layout.css";
+
 function Layout() {
   const navItems = useMemo(
     () => [
@@ -18,15 +21,14 @@ function Layout() {
   );
 
   const [selectedPage, setSelectedPage] = useState(navItems[0].key);
-
   const activeItem = navItems.find((item) => item.key === selectedPage);
 
   const renderPage = () => {
     switch (selectedPage) {
       case "dashboard":
-        return <h2>Dashboard Page</h2>;
+        return <DashBoard />;
       case "fleet":
-        return <h2>Fleet Page</h2>;
+        return <Fleet />;
       case "drivers":
         return <h2>Drivers Page</h2>;
       case "trips":
@@ -40,7 +42,7 @@ function Layout() {
       case "settings":
         return <h2>Settings Page</h2>;
       default:
-        return <h2>Dashboard Page</h2>;
+        return <DashBoard />;
     }
   };
 
@@ -51,7 +53,6 @@ function Layout() {
         selectedPage={selectedPage}
         onSelectPage={setSelectedPage}
       />
-
       <div className="main-shell">
         <TopNavBar title={activeItem?.label ?? "Dashboard"} />
         <main className="page-body">{renderPage()}</main>
