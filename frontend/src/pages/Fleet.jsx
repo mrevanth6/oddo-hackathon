@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./Fleet.css";
-
+import { toast } from "react-toastify";
+import axios from "axios";
+const BACKEND_URI = import.meta.env.VITE_API_URL;
 const initialFleetRows = [
   {
     regNo: "GT01AB4521",
@@ -79,20 +81,43 @@ function Fleet() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const newFleetRow = {
-      regNo: formData.regNo,
-      name: formData.name,
-      type: formData.type,
-      capacity: formData.capacity,
-      odometer: "0",
-      acqCost: formData.acqCost,
-      status: "Available",
-    };
-
+    try{
+      // Added JWT token to the request headers for authentication
+      const token = localStorage.getItem("authToken");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      const response = await axios.post(`${BACKEND_URI}/api/vehicles`,{ headers }, {
+        registrationNumber: formData.regNo,
+        name: formData.name,
+        type: formData.type,
+        maxLoadCapacity: formData.capacity,
+        acquisitionCost: formData.acqCost,
+      });
+      if(response.status === 201){
+        toast.success("Vehicle added successfully!");
+        const newFleetRow = {
+        regNo: formData.regNo,
+        name: formData.name,
+        type: formData.type,
+        capacity: formData.capacity,
+        odometer: "0",
+        acqCost: formData.acqCost,
+        status: "Available",
+        
+      };
+    }
     setFleetRows((previous) => [...previous, newFleetRow]);
+      
+    
+    } catch (error) {
+      console.error("Error adding vehicle:", error);
+    }
+    
+
+    
     closeModal();
   };
 

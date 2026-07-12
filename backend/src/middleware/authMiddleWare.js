@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');`
+require('dotenv').config();`
 const requireAuth = (req, res, next)=>{
     const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -6,17 +8,14 @@ const requireAuth = (req, res, next)=>{
   
   const token = authHeader.split(' ')[1];
   try {
-    const decoded = Buffer.from(token, 'base64').toString('utf-8');
-    const [userId, role] = decoded.split(':');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
     
-    const db = loadDB();
-    const user = db.users.find(u => u.id === userId);
-    
-    if (!user) {
+    if (!decoded) {
       return res.status(401).json({ error: 'Unauthorized access' });
     }
     
-    req.user = user;
+    req.user = decoded; // Attach the decoded user information to the request object
     next();
   } catch (err) {
     return res.status(401).json({ error: 'Invalid auth token' });
