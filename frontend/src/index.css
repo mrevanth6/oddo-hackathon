@@ -1,4 +1,16 @@
 * {
-    padding: 0;
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --ink-900: #0f1724;
+    --ink-800: #18212f;
+    --ink-700: #223044;
+    --ink-200: #d8e0ea;
+    --paper: #f4f6f8;
+    --line: #b3bcc6;
+    --accent: #f4b400;
+    --accent-shadow: rgba(170, 124, 0, 0.3);
 }
