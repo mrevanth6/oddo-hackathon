@@ -1,30 +1,30 @@
 
 const express=require('express')
+const cors=require('cors')
 const connection=require('./database')
 const path=require('path')
 const fs=require('fs')
 const { fileURLToPath } = require('url');
-const {login}=require('./controller/authController');
+
 const {requireAuth}=require('./middleware/authMiddleware');
-const Router=require('./routes/routes');
+const router=require('./routes/routes');
 
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
 const app = express();
+app.use(cors());
+
 const PORT = process.env.PORT || 3000;
-const DATA_FILE = path.join(process.cwd(), 'data-store.json');
 
 app.use(express.json());
-
-
-
-
-
 // RESTful API Endpoints
 
 // 1. Authentication
-app.post('/api',Router);
+app.use('/api', router);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
 // Auth Middleware
 
