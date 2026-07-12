@@ -1,12 +1,17 @@
 import "./LoginPage.css";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+// IMport env variable for backend URI
+const BACKEND_URI = import.meta.env.VITE_API_URL;
 function LoginPage() {
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("dispatcher");
-  function handleSubmit(e) {
+  const [role, setRole] = useState("Fleet Manager");
+  const navigate = useNavigate();
+ async function handleSubmit(e) {
     e.preventDefault();
     // Check if email is valid
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -14,10 +19,21 @@ function LoginPage() {
       toast.error("Please enter a valid email address.");
       return;
     }
-    toast.success("Login successful!");
-    // console.log("Email:", email);
-    // console.log("Password:", password);
-    // console.log("Role:", role);
+    try{
+      console.log("Submitting login form with:", { email, password, role });
+      const response=await axios.post(`${BACKEND_URI}/api/auth/login`,{email,password,role});
+      console.log("Login response:", response); // Log the response data for debugging
+      if(response.status===200){
+        const { token } = response.data;
+        localStorage.setItem("authToken", token);
+        navigate("/dashboard"); // Redirect to the dashboard page after successful login
+        toast.success("Login successful! Redirecting to dashboard...");
+      }
+
+    } catch (error) {
+      console.log("Login error:", error.response ? error.response.data : error.message); // Log the error for debugging
+      toast.error("Invalid email or password.");
+    }
   }
   return (
     <main className="login-page">
@@ -74,14 +90,14 @@ function LoginPage() {
             <label htmlFor="role">ROLE (RBAC)</label>
             <select
               id="role"
-              defaultValue="dispatcher"
+              
               value={role}
               onChange={(e) => setRole(e.target.value)}
             >
-              <option value="fleet-manager">Fleet Manager</option>
-              <option value="dispatcher">Dispatcher</option>
-              <option value="safety-officer">Safety Officer</option>
-              <option value="financial-analyst">Financial Analyst</option>
+              <option value="Fleet Manager">Fleet Manager</option>
+              <option value="Dispatcher">Dispatcher</option>
+              <option value="Safety Officer">Safety Officer</option>
+              <option value="Financial Analyst">Financial Analyst</option>
             </select>
           </div>
 
