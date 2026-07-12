@@ -3,6 +3,7 @@ import Sidebar from "./Sidebar";
 import TopNavBar from "./TopNavBar";
 import DashBoard from "../pages/DashBoard";
 import Fleet from "../pages/Fleet";
+import Drivers from "../pages/Drivers";
 import "./Layout.css";
 
 function Layout() {
@@ -30,7 +31,7 @@ function Layout() {
       case "fleet":
         return <Fleet />;
       case "drivers":
-        return <h2>Drivers Page</h2>;
+        return <Drivers />;
       case "trips":
         return <h2>Trips Page</h2>;
       case "maintenance":
